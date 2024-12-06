@@ -2,37 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
-    // Définition du nom de la table
-    protected $table = 'clients';
+    use HasFactory;
 
+    protected $fillable = ['Nom', 'Prenom', 'Email', 'Telephone'];
 
-
-    // Définition des attributs
-    protected $fillable = [
-        'id',
-        'designation',
-        'ice',
-        'if',
-        'rc',
-        'adresse',
-        'tel',
-        'email',
-        'gerant',
-    ];
-
-
-    // Relations
-     public function factures()
+    public function eventReservations()
     {
-        return $this->hasMany(Facture::class); 
-    }
-    public function contracts()
-    {
-        return $this->hasMany(Contract::class); 
+        return $this->hasMany(EventReservation::class, 'IDUser');
     }
 }
-

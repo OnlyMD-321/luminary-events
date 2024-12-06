@@ -2,61 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\client;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
-
 {
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $search = $request->query('search');
-    $clients = Client::when($search, function ($query, $search) {
-        return $query->where('designation', 'like', "%{$search}%");
-    })->get();
+    {
+        $search = $request->query('search');
+        $clients = Client::when($search, function ($query, $search) {
+            return $query->where('Nom', 'like', "%{$search}%")
+                         ->orWhere('Prenom', 'like', "%{$search}%");
+        })->get();
 
-    return view('back.client', compact('clients'));
-}
+        return view('back.client', compact('clients'));
+    }
 
     /**
      * Show the form for creating a new resource.
      */
-
-
-     public function create(Request $request)
-     {
-         $validatedData = $request->validate([
-             'designation' => 'required|string',
-             'email' => 'required|email',
-             'tel' => 'required|string|min:10',
-             'ice' => 'required|string|max:15', // Limitez la longueur à 15 caractères
-             'if' => 'required|string',
-             'rc' => 'required|string',
-         ]);
-
-         // Ajouter des zéros à gauche si la longueur de l'ICE est inférieure à 15
-         $ice = str_pad($validatedData['ice'], 15, '0', STR_PAD_LEFT);
-         $validatedData['ice'] = $ice;
-
-         Client::create($validatedData);
-
-         return redirect()->route('client')->with('success', 'Client créé avec succès!');
-     }
-
-
-
-
+    public function create()
+    {
+        return view('back.createclient');
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'Nom' => 'required|string',
+            'Prenom' => 'required|string',
+            'Email' => 'required|email',
+            'Telephone' => 'required|string|min:10',
+        ]);
+
+        Client::create($validatedData);
+
+        return redirect()->route('clients.index')->with('success', 'Client créé avec succès!');
     }
 
     /**
@@ -64,13 +51,8 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-
-
-            $client = Client::findOrFail($id);
-
-            return view('Back/Show/showclient', compact('client'));
-
-
+        $client = Client::findOrFail($id);
+        return view('back.showclient', compact('client'));
     }
 
     /**
@@ -79,59 +61,35 @@ class ClientController extends Controller
     public function edit($id)
     {
         $client = Client::findOrFail($id);
-
-        return view('Back/Edit/editclient', compact('client'));
+        return view('back.editclient', compact('client'));
     }
-
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'designation' => 'required|string|max:255',
-            'email' => 'required|email|max:255', // Add validation for email
-            'tel' => 'required|string|max:255',
-            'ice' => 'required|string|max:255',
-            'if' => 'required|string|max:255',
-            'rc' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'Nom' => 'required|string|max:255',
+            'Prenom' => 'required|string|max:255',
+            'Email' => 'required|email|max:255',
+            'Telephone' => 'required|string|max:255',
         ]);
 
         $client = Client::findOrFail($id);
+        $client->update($validatedData);
 
-        if (!$client) {
-            return redirect()->route('client')->with('error', 'Client introuvable');
-        }
-
-        $client->designation = $request->input('designation');
-        $client->email = $request->input('email');
-        $client->tel = $request->input('tel');
-        $client->ice = $request->input('ice');
-        $client->if = $request->input('if');
-        $client->rc = $request->input('rc');
-
-        $client->save();
-
-        return redirect()->route('client')->with('message', 'Client mis à jour avec succès');
+        return redirect()->route('clients.index')->with('message', 'Client mis à jour avec succès');
     }
-
 
     /**
      * Remove the specified resource from storage.
      */
+    public function destroy($id)
+    {
+        $client = Client::findOrFail($id);
+        $client->delete();
 
-        public function destroy($id)
-{
-       $client = Client::findOrFail($id);
-
-
-
-
-    $client->delete();
-
-
-    return redirect()->route('client')->with('success', 'Client supprimé avec succès');
-}
-
+        return redirect()->route('clients.index')->with('success', 'Client supprimé avec succès');
     }
+}

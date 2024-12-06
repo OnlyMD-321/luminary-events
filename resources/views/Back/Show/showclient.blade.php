@@ -1,8 +1,7 @@
 <x-app-layout>
-
-        <h2 class="font-semibold text-xl">
-            {{ __('Client Details') }}
-        </h2>
+    <h2 class="font-semibold text-xl mb-4 text-center">
+        {{ __('Client Details') }}
+    </h2>
 
     <div class="container mt-5">
         <div class="card shadow-sm">
@@ -11,37 +10,27 @@
                     @csrf
 
                     <div class="col-12">
-                        <label for="designation" class="form-label">Désignation:</label>
-                        <input readonly type="text" id="designation" name="designation" value="{{ old('designation', $client->designation) }}" required class="form-control">
+                        <label for="Nom" class="form-label">Nom:</label>
+                        <input readonly type="text" id="Nom" name="Nom" value="{{ old('Nom', $client->Nom) }}" required class="form-control">
                     </div>
 
                     <div class="col-12">
-                        <label for="email" class="form-label">Email:</label>
-                        <input readonly type="email" id="email" name="email" value="{{ old('email', $client->email) }}" required class="form-control">
+                        <label for="Prenom" class="form-label">Prénom:</label>
+                        <input readonly type="text" id="Prenom" name="Prenom" value="{{ old('Prenom', $client->Prenom) }}" required class="form-control">
                     </div>
 
                     <div class="col-12">
-                        <label for="tel" class="form-label">Téléphone:</label>
-                        <input readonly type="tel" id="tel" name="tel" value="{{ old('tel', $client->tel) }}" required class="form-control">
+                        <label for="Email" class="form-label">Email:</label>
+                        <input readonly type="email" id="Email" name="Email" value="{{ old('Email', $client->Email) }}" required class="form-control">
                     </div>
 
                     <div class="col-12">
-                        <label for="ice" class="form-label">ICE:</label>
-                        <input readonly type="text" id="ice" name="ice" value="{{ old('ice', $client->ice) }}" required class="form-control">
-                    </div>
-
-                    <div class="col-12">
-                        <label for="if" class="form-label">IF:</label>
-                        <input readonly type="text" id="if" name="if" value="{{ old('if', $client->if) }}" required class="form-control">
-                    </div>
-
-                    <div class="col-12">
-                        <label for="rc" class="form-label">RC:</label>
-                        <input readonly type="text" id="rc" name="rc" value="{{ old('rc', $client->rc) }}" required class="form-control">
+                        <label for="Telephone" class="form-label">Téléphone:</label>
+                        <input readonly type="tel" id="Telephone" name="Telephone" value="{{ old('Telephone', $client->Telephone) }}" required class="form-control">
                     </div>
 
                     <div class="col-12 d-flex justify-content-end">
-                        <a href="/client" class="btn btn-secondary ms-2">Retour</a>
+                        <a href="{{ route('clients.index') }}" class="btn btn-secondary ms-2">Retour</a>
                     </div>
                 </form>
             </div>

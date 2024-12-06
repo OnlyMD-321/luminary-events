@@ -16,49 +16,48 @@
                     <div class="container">
                         <!-- Search and Add Button -->
                         <div class="flex justify-between mb-6">
-                            <form method="GET" action="{{ route('client') }}" class="flex items-center">
-                                <input type="text" name="search" placeholder="Search by designation" class="form-control mr-2 w-full" value="{{ request()->query('search') }}">
+                            <form method="GET" action="{{ route('clients.index') }}" class="flex items-center">
+                                <input type="text" name="search" placeholder="Search by name" class="form-control mr-2 w-full" value="{{ request()->query('search') }}">
                                 <button type="submit" class="btn btn-secondary mr-2">Search</button>
                             </form>
-                            <a href="/addclient" class="btn btn-primary single-line">Add New Client</a>
+                            <a href="{{ route('clients.create') }}" class="btn btn-primary single-line">Add New Client</a>
                         </div>
                         <table class="table table-striped table-hover">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Id</th>
-                                    <th>Designation</th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
                                     <th>Email</th>
-                                    <th>Tel</th>
-                                    <th>ICE</th>
-                                    <th>IF</th>
-                                    <th>RC</th>
+                                    <th>Téléphone</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($clients as $client)
+                                @forelse($clients as $client)
                                     <tr>
                                         <td>{{ $client->id }}</td>
-                                        <td>{{ $client->designation }}</td>
-                                        <td>{{ $client->email }}</td>
-                                        <td>{{ $client->tel }}</td>
-                                        <td>{{ $client->ice }}</td>
-                                        <td>{{ $client->if }}</td>
-                                        <td>{{ $client->rc }}</td>
+                                        <td>{{ $client->Nom }}</td>
+                                        <td>{{ $client->Prenom }}</td>
+                                        <td>{{ $client->Email }}</td>
+                                        <td>{{ $client->Telephone }}</td>
                                         <td>
-                                            <a href="{{ route('client.show', $client->id) }}" class="btn btn-success btn-sm">View</a>
-                                            <a href="{{ route('client.edit', $client->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="{{ route('client.delete', $client->id) }}" method="POST" style="display: inline;">
+                                            <a href="{{ route('clients.show', $client->id) }}" class="btn btn-success btn-sm">View</a>
+                                            <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this client?')">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center">No clients found</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
